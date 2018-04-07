@@ -1,7 +1,7 @@
 # arduinolab
 Ćwiczenia laboratoryjne z Arduino.
 
-My arduino laboratory exercises.
+My arduino laboratory exercises. Use Polish timer: http://bit.ly/arduinotimer
 
 Some projects are not mine:
  - https://github.com/BLavery/virtual-GPIO
