@@ -1,5 +1,7 @@
+
+
 /*
- *   Pinouts:
+     Pinouts:
                                       +-----+
          +----[PWR]-------------------| USB |--+
          |                            +-----+  |
@@ -27,205 +29,148 @@
          |  UNO_R3    GND MOSI 5V  ____________/
           \_______________________/
 
-		  http://busyducks.com/ascii-art-arduinos
- *
-Przykład programu do obsługi modułu AVT1722 miniLCD z:
-- wyświetlaczem LCD 2x8 znaków
-- diodą LED RGB G 10, R 11, B 12 (kolor podłączenie arduino)
-- 4 przyciskami A1,A2,A3,A4
-- przekaźnik A0
-- impulsator 1 2 (przycisk w gałce 0)
- */
-#include <LiquidCrystal.h> //biblioteka obsługi LCD
-const int Led1 = 12; //niebieski
-const int Led2 = 11; //czerwony
-const int Led3 = 10; //zielony
+      http://busyducks.com/ascii-art-arduinos
+
+  Przykład programu do obsługi modułu AVT1722 miniLCD z:
+  - wyświetlaczem LCD 2x8 znaków
+  - diodą LED RGB G 10, R 11, B 12 (kolor podłączenie arduino)
+  - 4 przyciskami A1,A2,A3,A4
+  - przekaźnik A0
+  - impulsator 0 1 2
+*/
+#include <LiquidCrystal.h>          //biblioteka obsługi LCD
+
+//#include "Timers.h"               //dołączona biblioteka Timers z forum android http://bit.ly/arduinotimer
+//Timers <2> akcja;
+
+#include <Timers.h>                 //Nettigo timers 
+Timer NettigoTimer1;
+Timer NettigoTimer2;
+
+unsigned long currentTime;
+unsigned long loopTime;
+const int pin_A = 1;                // pin 1 impulsatora
+const int pin_B = 2;                // pin 2 impulsatora
+unsigned char odczyt_A;
+unsigned char odczyt_B;
+unsigned char odczyt_A_ostatni = 0;
+unsigned char odczyt_B_ostatni = 0;
+int pwm = 30;                      // ustawienie wartości PWM
+int delta = 1;                      // o ile zmniejszyć wartość
+
+const int Led1 = 12;                //przypisanie aliasów do pinów portów
+const int Led2 = 11;
+const int Led3 = 10;
 const int Led4 = A0;
 const int SW1 = A1;
 const int SW2 = A2;
 const int SW3 = A3;
 const int SW4 = A4;
-const int Buzzer = 13;
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7); //konfigurowanie linii do których został dołączony LCD
 
-byte st[8] = { //tablica znaku stopnia dla wyświetlacza LCD
-		B00100,
-		B01010,
-		B00100,
-		B00000,
-		B00100,
-		B01010,
-		B00100,
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);//konfigurowanie linii do których został dołączony LCD
+byte st[8] = {                      //tablica znaku stopnia dla wyświetlacza LCD
+  B11000,
+  B11000,
+  B11000,
+  B11000,
+  B11000,
+  B11111,
+  B11111,
 };
-byte st1[8] = {
-		0b01010,
-		0b11011,
-		0b00100,
-		0b11011,
-		0b01010,
-		0b00100,
-		0b01110,
-		0b00100
-};
-int pwm = 120;   // ustawienie wartości PWM
-int delta = 10;    // o ile zmniejszyć wartość
-unsigned long currentTime;
-unsigned long loopTime;
-const int pin_A = 1;  // pin 1
-const int pin_B = 2;  // pin 2
-unsigned char odczyt_A;
-unsigned char odczyt_B;
-unsigned char odczyt_A_ostatni=0;
-unsigned char odczyt_B_ostatni=0;
-void setup() { //funkcja inicjalizacji
-	lcd.begin(8, 2); //konfigurowanie rozdzielczości LCD
-	lcd.createChar(0, st); //funkcja utworzenia własnego znaku z tablicy st o kodzie 0
-	lcd.createChar(1, st1);
-	analogReference(DEFAULT); //konfigurowanie napięcia odniesienia
-	//dla przetwornika A/C - domyślnie 5V
-	pinMode(Led1, OUTPUT); //konfigurowanie I/O, do których są
-	//dołączone diody LED
-	pinMode(Led2, OUTPUT);
-	pinMode(Led3, OUTPUT);
-	pinMode(Led4, OUTPUT);
-	pinMode(1, OUTPUT);
-	pinMode(2, OUTPUT);
-	//pinMode(Buzzer, OUTPUT); //konfigurowanie I/O, do której jest
-	//dołączony brzęczyk piezzo
-	pinMode(SW1, INPUT); //konfigurowanie I/O, do których są
-	//dołączone przyciski
-	pinMode(SW2, INPUT);
-	pinMode(SW3, INPUT);
-	pinMode(SW4, INPUT);
-	digitalWrite(SW1, HIGH); //dołączenie wewnętrznych rezystorów
-	//zasilających
-	digitalWrite(SW2, HIGH);
-	digitalWrite(SW3, HIGH);
-	digitalWrite(SW4, HIGH);
-	digitalWrite(Led1, LOW); //wyłączenie diod LED
-	digitalWrite(Led2, LOW);
-	digitalWrite(Led3, LOW);
-	digitalWrite(Led4, LOW);
-	//digitalWrite(Buzzer, HIGH); //wyłączenie brzęczyka piezzo
-	pinMode(Led1, OUTPUT);
-	pinMode(pin_A, INPUT);
-	pinMode(pin_B, INPUT);
-	currentTime = millis();
-	loopTime = currentTime;
 
+void impulsator() {
+  lcd.clear();                      //czyszczenie LCD
+  odczyt_A = digitalRead(pin_A);    //czytaj stany impulsatora
+  odczyt_B = digitalRead(pin_B);
+  if ((odczyt_B != odczyt_B_ostatni && odczyt_A == 1) || (odczyt_A != odczyt_A_ostatni && odczyt_B == 0 && odczyt_A == 0)){                           
+    if (pwm - delta >= 0)           //zmniejsz wartość, ale nie zejdź poniżej zera
+      pwm -= delta;
+  }
+
+  if ((odczyt_A != odczyt_A_ostatni && odczyt_B == 1) || (odczyt_B != odczyt_B_ostatni && odczyt_A == 0 && odczyt_B == 0)){
+    if (pwm + delta <= 255)        //zwiększ wartość, ale nie przekrocz 255
+      pwm += delta;
+  }
+  odczyt_A_ostatni = odczyt_A;     // zapisz wartość A na następną pętlę
+  odczyt_B_ostatni = odczyt_B;     // zapisz wartość B na następną pętlę
+  noweznaki();
 }
-void loop() { //pętla główna programu
-	lcd.clear(); //czyszczenie LCD
-	lcd.setCursor(0, 0); //ustawienie kursora
+
+void noweznaki() {
+  lcd.setCursor(0, 0);             //ustawienie kursora
+  lcd.print("U=");                 //wyświetlenie napisu U=
+  lcd.print(pwm);
+  lcd.print(" ");                  //wyświetlenie napisu :)
+  lcd.write((uint8_t)0);           //wyświetlenie znaku zdefiniowanego 0
+  lcd.setCursor(0, 1);             //ustawienie kursora na drugim wierszu, pierwszej kolumnie
+  lcd.print("A=");                 //wyświetlenie napisu A=
+  lcd.print(odczyt_A);
+  lcd.print("B=");                 //wyświetlenie napisu B=
+  lcd.print(odczyt_B);
+  lcd.print(":)");                 //wyświetlenie znaku :)
+}
+
+void sprawdzprzycisk(int SW, int i)
+{
+  if (digitalRead(SW) == LOW) {
+    digitalWrite(Led1, HIGH);      //zaświecenie LED1
+    lcd.clear();                   //czyszczenie LCD
+    lcd.setCursor(2, 0);           //ustawienie kursora w pierwszym rzędzie i drugiej kolumnie LCD
+    lcd.print("S"); lcd.print(i);  //wyświetlenie nazwy przycisku
+    while (digitalRead(SW) == LOW);//oczekiwanie na zwolnienie przycisku S1
+  } else {                         //w przeciwnym razie
+    digitalWrite(Led1, LOW);       //wyłączenie diody LED1
+  }
+}
+
+void przyciski() {
+  sprawdzprzycisk(SW1, 1);         //sprawdzenie czy naciśnięto przycisk S1 
+  sprawdzprzycisk(SW2, 2);         //sprawdzenie czy naciśnięto przycisk S2 
+  sprawdzprzycisk(SW3, 3);         //sprawdzenie czy naciśnięto przycisk S3 
+  sprawdzprzycisk(SW4, 4);         //sprawdzenie czy naciśnięto przycisk S4
+}
 
 
-	lcd.print("U="); //wyświetlenie napisu U=
+void setup() {                     //funkcja inicjalizacji
+  lcd.begin(8, 2);                 //konfigurowanie rozdzielczości LCD
+  lcd.createChar(0, st);           //funkcja utworzenia własnego znaku z tablicy st o kodzie 0
+  analogReference(DEFAULT);        //konfigurowanie napięcia odniesienia dla przetwornika A/C - domyślnie 5V
+  pinMode(Led1, OUTPUT);           //konfigurowanie I/O, do których są dołączone diody LED
+  pinMode(Led2, OUTPUT);
+  pinMode(Led3, OUTPUT);
+  pinMode(Led4, OUTPUT);
+  pinMode(SW1, INPUT);             //konfigurowanie I/O, do których są dołączone przyciski
+  pinMode(SW2, INPUT);
+  pinMode(SW3, INPUT);
+  pinMode(SW4, INPUT);
+  digitalWrite(SW1, HIGH);         //dołączenie wewnętrznych rezystorów zasilających
+  digitalWrite(SW2, HIGH);
+  digitalWrite(SW3, HIGH);
+  digitalWrite(SW4, HIGH);
+  digitalWrite(Led1, LOW);         //wyłączenie diod LED
+  digitalWrite(Led2, LOW);
+  digitalWrite(Led3, LOW);
+  digitalWrite(Led4, LOW);
+  //akcja.attach(0, 122, przyciski); // Wątek 1
+  //akcja.attach(1, 30, impulsator); // Wątek 2
+  loopTime = currentTime;
+  pinMode(pin_A, INPUT);
+  pinMode(pin_B, INPUT);
+  NettigoTimer1.begin(122);
+  NettigoTimer2.begin(30);
+}
 
-	// zapisz czas
-	currentTime = millis();
-	if(currentTime >= (loopTime + 5)){
-		// 5ms od ostatniego razu = 200Hz
-		odczyt_A = digitalRead(pin_A);    // czytaj stany impulsatora
-		odczyt_B = digitalRead(pin_B);
-		if((!odczyt_A) && (odczyt_A_ostatni)){
-			//A przełączyło się z wysokiego na niski stan
-			if(odczyt_B) {
-				// B jest wysoko to zwiększ wartość
-				// ale nie przekrocz 255
-				if(pwm + delta <= 255) pwm += delta;
-			}
-			else {
-				// B jest nisko to zmniejsz wartość
-				// ale nie zejdź poniżej zera
-				if(pwm - delta >= 0) pwm -= delta;
-			}
-		}
-		if((!odczyt_B) && (odczyt_B_ostatni)){
-			// B przełączyło się z wysokiego na niski stan
-			if(!odczyt_A) {
-				// A jest nisko to zwiększ wartość
-				// ale nie przekrocz 255
-				if(pwm + delta <= 255) pwm += delta;
-			}
-			else {
-				// A jest wysoko to zmniejsz wartość
-				// ale nie zejdź poniżej zera
-				if(pwm - delta >= 0) pwm -= delta;
-			}
-		}
-		odczyt_A_ostatni = odczyt_A;     // zapisz wartość A na następną pętlę
-		odczyt_B_ostatni = odczyt_B;     // zapisz wartość B na następną pętlę
-		// ustaw błyski diody led1 niebieski
-		analogWrite(Led1, pwm);
-		lcd.print(pwm); //wyświetlenie napięcia
-
-		loopTime = currentTime;  // Updates loopTime
-	}
-	// Other processing can be done here
-
-	lcd.write((uint8_t)1);
-	lcd.print(":)"); //wyświetlenie napisu :)
-
-	//lcd.print(loopTime); //wyświetlenie
-	lcd.print("V"); //wyświetlenie znaku V
-
-	lcd.setCursor(0, 1);
-	//ustawienie kursora na drugim wierszu, pierwszej kolumnie
-	lcd.print("A="); //wyświetlenie napisu A=
-	lcd.print(odczyt_A);
-	lcd.print("B="); //wyświetlenie napisu B=
-	lcd.print(odczyt_B);
-	//wyświetlenie wartości temperatury zaokrąglonej do pełnych stopni
-	lcd.write((uint8_t)0); //wyświetlenie znaku zdefiniowanego 0
-	lcd.print(")"); //wyświetlenie znaku )
-	//sprawdzenie czy naciśnięto przycisk S1
-	if (digitalRead(SW1) == LOW) {
-		digitalWrite(Led1, HIGH); //zaświecenie LED1
-		digitalWrite(Buzzer, HIGH); //włączenie brzęczyka
-		lcd.clear(); //czyszczenie LCD
-		//ustawienie kursora w pierwszym rzędzie i drugiej kolumnie lcd.
-		lcd.setCursor(2, 0);
-		lcd.print("S1"); //wyświetlenie nazwy przycisku
-		//oczekiwanie na zwolnienie przycisku S1
-		while (digitalRead(SW1) == LOW);
-	} else { //w przeciwnym razie
-		digitalWrite(Led1, LOW); //wyłączenie diody LED1
-		digitalWrite(Buzzer, LOW); //wyłączenie brzęczyka
-	}
-	if (digitalRead(SW2) == LOW) { //sprawdzenie czy naciśnięto S2
-		digitalWrite(Led2, HIGH);
-		digitalWrite(Buzzer, HIGH);
-		lcd.clear();
-		lcd.setCursor(2, 0);
-		lcd.print("S2");
-		while (digitalRead(SW2) == LOW);
-	} else {
-		digitalWrite(Led2, LOW);
-		digitalWrite(Buzzer, LOW);
-	}
-	if (digitalRead(SW3) == LOW) { //sprawdzenie czy naciśnięto S3
-		digitalWrite(Led3, HIGH);
-		digitalWrite(Buzzer, HIGH);
-		lcd.clear();
-		lcd.setCursor(2, 0);
-		lcd.print("S3");
-		while (digitalRead(SW3) == LOW);
-	} else {
-		digitalWrite(Led3, LOW);
-		digitalWrite(Buzzer, LOW);
-	}
-	if (digitalRead(SW4) == LOW) { //sprawdzenie czy naciśnięto S4
-		digitalWrite(Led4, HIGH);
-		digitalWrite(Buzzer, HIGH);
-		lcd.clear();
-		lcd.setCursor(2, 0);
-		lcd.print("S4");
-		while (digitalRead(SW4) == LOW);
-	} else {
-		digitalWrite(Led4, LOW);
-		digitalWrite(Buzzer, LOW);
-	}
-
-	delay(50); //opóźnienie o 50ms
-} //koniec pętli głównej
+void loop() {                      //pętla główna programu
+//  akcja.process();               // inicjalizacja lub aktualizacja wszystkich procedur(wątków, zdarzeń itp.)
+  if (NettigoTimer1.available())
+  {
+    przyciski();
+    NettigoTimer1.restart();
+  }
+  if (NettigoTimer2.available())
+  {
+    impulsator();
+    NettigoTimer2.restart();
+  }
+}                                  //koniec pętli głównej
 
