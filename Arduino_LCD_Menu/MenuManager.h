@@ -22,7 +22,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include "MenuEntry.h"
 #include "MenuLCD.h"
 #include "MenuIntHelper.h"
+#ifndef MenuMan_H
 
+#define MenuMan_H 1
 enum MENU_ACTION { MENU_ACTION_UP, MENU_ACTION_DOWN, MENU_ACTION_SELECT, MENU_ACTION_BACK };
 
 class MenuManager
@@ -57,5 +59,5 @@ class MenuManager
   int *m_pInt;
 };
 
-
+#endif
 
