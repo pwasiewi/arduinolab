@@ -55,7 +55,7 @@ float wart_pot;                     //zmienna na wartość zmierzona z potencjom
 float wart_czuj;                    //zmienna na wartość zmierzonej z czujnika temperatury
 float wart_nap;                     //zmienna na wartość zmierzonego napięcia
 float temperatura;                  //zmienna na wartość zmierzonej temperatury
-byte st[8] = {            //tablica znaku stopnia dla wyswietlacza LCD
+byte st[8] = {                      //tablica znaku stopnia dla wyswietlacza LCD
   B00100,
   B01010,
   B00100,
@@ -141,5 +141,8 @@ void setup() {                     //funkcja inicjalizacji
   akcja.attach(1, 500,  termometr);// Wątek 2
 }
 
+void loop() {                      //pętla główna programu
+  akcja.process();                 //inicjalizacja lub aktualizacja wszystkich procedur(wątków, zdarzeń itp.)
+}                                  //koniec pętli głównej
 
 
