@@ -116,7 +116,7 @@ void termometr(){
 }
 
 void setup() {                     //funkcja inicjalizacji
-  lcd.begin(16, 2);                 //konfigurowanie rozdzielczości LCD
+  lcd.begin(16, 2);                //konfigurowanie rozdzielczości LCD
   lcd.createChar(0, st);           //funkcja utworzenia własnego znaku z tablicy st o kodzie 0
   analogReference(DEFAULT);        //konfigurowanie napięcia odniesienia dla przetwornika A/C - domyślnie 5V
   pinMode(Led1, OUTPUT);           //konfigurowanie I/O, do których są dołączone diody LED
@@ -132,16 +132,14 @@ void setup() {                     //funkcja inicjalizacji
   digitalWrite(SW2, HIGH);
   digitalWrite(SW3, HIGH);
   digitalWrite(SW4, HIGH);
-  digitalWrite(Led1, HIGH);         //wyłączenie diod LED
+  digitalWrite(Led1, HIGH);        //wyłączenie diod LED
   digitalWrite(Led2, HIGH);
   digitalWrite(Led3, HIGH);
   digitalWrite(Led4, HIGH);
   digitalWrite(Buzzer, HIGH);      //wyłączenie brzęczyka piezzo
   akcja.attach(0, 122, przyciski); // Wątek 1
-  akcja.attach(1, 500,  termometr); // Wątek 2
+  akcja.attach(1, 500,  termometr);// Wątek 2
 }
 
-void loop() {                      //pętla główna programu
-  akcja.process();                 //inicjalizacja lub aktualizacja wszystkich procedur(wątków, zdarzeń itp.)
-}                                  //koniec pętli głównej
+
 

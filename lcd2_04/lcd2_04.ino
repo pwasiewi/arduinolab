@@ -1,9 +1,9 @@
 /*
-Przykład obsługi wyświetlacza LCD
-Wyświetlenie na LCD przykładowego tekstu oraz wartości analogowej i napieciowej zmierzonej z wyjscia potencjometru.
-Przykład obsługi generatora PWM
-Jasność świecenia diody LED4 zalezna jest od napiecia zmierzonego z potencjometru
-Dioda LED3 pulsuje czyli zmienia jasnosc od najmniejszej do najwiekszej i odwrotnie
+  Przykład obsługi wyświetlacza LCD
+  Wyświetlenie na LCD przykładowego tekstu oraz wartości analogowej i napieciowej zmierzonej z wyjscia potencjometru.
+  Przykład obsługi generatora PWM
+  Jasność świecenia diody LED4 zalezna jest od napiecia zmierzonego z potencjometru
+  Dioda LED3 pulsuje czyli zmienia jasnosc od najmniejszej do najwiekszej i odwrotnie
   Pinouts:
                                       +-----+
          +----[PWR]-------------------| USB |--+
@@ -36,49 +36,62 @@ Dioda LED3 pulsuje czyli zmienia jasnosc od najmniejszej do najwiekszej i odwrot
 
 */
 
-#include <LiquidCrystal.h>    //biblioteka obsługi LCD
 
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7);    //konfuguracja linii do ktorych został dołaczony LCD
+#include <LiquidCrystal.h>          //biblioteka obsługi LCD
 
-const int Led3 =  11;         //przypisanie aliasów do pinów portów
-const int Led4 =  10;         //przypisanie aliasów do pinów portów
+#include "Timers.h"                 // dołączona biblioteka Timers z forum android http://bit.ly/arduinotimer
+Timers <1> akcja;
 
-int wart = 0;   //zmienna pomocnicza
+const int Led1 = 13;                //przypisanie aliasów do pinów portów
+const int Led2 = 12;
+const int Led3 = 11;
+const int Led4 = 10;
+const int SW1 = 3;
+const int SW2 = 2;
+const int SW3 = 1;
+const int SW4 = 0;
+const int Buzzer = A5;
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);//konfigurowanie linii do których został dołączony LCD
 
-int wart_pot;              //zmienna na wartosc zmierzona z potencjometru
-float wart_nap;            //zmienna na wartosc zmierzonego napiecia
 
-void setup() {            //funkcja inicjalizacji
-  lcd.begin(16, 2);        //konfiguracja rozdzielczosci wyswietlacza LCD
-  analogReference(DEFAULT);   //konfiguracja napiecia odniesienia dla przetwornika A/C - domyslnie napieciem odniesienia jest 5V.
+int wart = 0;                       //zmienna pomocnicza
+int wart_pot;                       //zmienna na wartosc zmierzona z potencjometru
+float wart_nap;                     //zmienna na wartosc zmierzonego napiecia
+
+void setup() {                      //funkcja inicjalizacji
+  lcd.begin(16, 2);                 //konfiguracja rozdzielczosci wyswietlacza LCD
+  analogReference(DEFAULT);         //konfiguracja napiecia odniesienia dla przetwornika A/C - domyslnie napieciem odniesienia jest 5V.
+  akcja.attach(0, 200, diody);      //Wątek 1
 }
 
-void loop() {                //petla glowna programu
-  lcd.clear();              //czyszczenie LCD
-  lcd.setCursor(3, 0);      //ustawienie kursora w 4 kolumnie pierwszego wiersza
-  lcd.print("Analog I/O");      //wyswietlenie na LCD napisu Analog I/O
-  wart_pot = analogRead(A0); //pomiar napiecia z potencjometru do zmiennej wart_pot
-  wart_nap=(5.0*wart_pot)/1024.0;        //przeliczenie odczytanej wartosci na napiecie
-  lcd.setCursor(0, 1);                  //ustawienie kursora w pierwszej pozycji drugiego wiersza LCD
-  lcd.print("U=");                      //wyswietlenie napisu U=
-  lcd.print(wart_nap);                  //wyswietlenie zmierzonej wartosci napiecia z potencjometru
-  lcd.print("V");                      //wyswietlenie znaku V
-  lcd.setCursor(8, 1);                  //ustawienie kursora w 8 pozycji drugiego wiersza LCD
-  lcd.print("A/C=");                      //wyswietlenie napisu A/C=
-  lcd.print(wart_pot);                  //wyswietlenie zmierzonej wartosci przez A/C
-  for (int i = 0; i < 256; i++)   //petla wykonywana 255 razy gdzie i zmienia wartosc od 0 do 255
+void diody() {
+  lcd.clear();                      //czyszczenie LCD
+  lcd.setCursor(3, 0);              //ustawienie kursora w 4 kolumnie pierwszego wiersza
+  lcd.print("Analog I/O");          //wyswietlenie na LCD napisu Analog I/O
+  wart_pot = analogRead(A0);        //pomiar napiecia z potencjometru do zmiennej wart_pot
+  wart_nap = (5.0 * wart_pot) / 1024.0; //przeliczenie odczytanej wartosci na napiecie
+  lcd.setCursor(0, 1);              //ustawienie kursora w pierwszej pozycji drugiego wiersza LCD
+  lcd.print("U=");                  //wyswietlenie napisu U=
+  lcd.print(wart_nap);              //wyswietlenie zmierzonej wartosci napiecia z potencjometru
+  lcd.print("V");                   //wyswietlenie znaku V
+  lcd.setCursor(8, 1);              //ustawienie kursora w 8 pozycji drugiego wiersza LCD
+  lcd.print("A/C=");                //wyswietlenie napisu A/C=
+  lcd.print(wart_pot);              //wyswietlenie zmierzonej wartosci przez A/C
+  for (int i = 0; i < 256; i++)     //petla wykonywana 255 razy gdzie i zmienia wartosc od 0 do 255
   {
-    analogWrite(Led4, i);     //zapisanie poziomu wypelnienia sygnalu PWM ze zmiennej i
-    delay(1);         //opoznienie
+    analogWrite(Led4, i);           //zapisanie poziomu wypelnienia sygnalu PWM ze zmiennej i
+    delay(1);                       //opoznienie
   }
-  for (int i = 255; i > 0; i--)    //petla wykonywana 255 razy gdzie i zmienia wartosc od 255 do 0
+  for (int i = 255; i > 0; i--)     //petla wykonywana 255 razy gdzie i zmienia wartosc od 255 do 0
   {
-    analogWrite(Led4, i); //zapisanie poziomu wypelnienia sygnalu PWM ze zmiennej i
-    delay(1);  //opoznienie
+    analogWrite(Led4, i);           //zapisanie poziomu wypelnienia sygnalu PWM ze zmiennej i
+    delay(1);                       //opoznienie
   }
-  wart =  analogRead(A0);     //pomiar napiecia z potencjometru ktorego wartosc zapisywana jest do zmiennej wart
-  analogWrite(Led3, wart / 4);   //zapisanie poziomu wypelnienia sygnalu PWM diody Led3 odczytanego z potencjometry i jego podziale przez 4
+  wart =  analogRead(A0);           //pomiar napiecia z potencjometru ktorego wartosc zapisywana jest do zmiennej wart
+  analogWrite(Led3, wart / 4);      //zapisanie poziomu wypelnienia sygnalu PWM diody Led3 odczytanego z potencjometry i jego podziale przez 4
+}
 
-  delay(300);                          //opoznienei 300ms
-}                                      //koniec petli glownie programu
+void loop() {                       //pętla główna programu
+  akcja.process();                  //inicjalizacja lub aktualizacja wszystkich procedur(wątków, zdarzeń itp.)
+}                                   //koniec pętli głównej
 
