@@ -122,12 +122,12 @@ void setup() {
   lcd.begin(16, 2);                //konfigurowanie rozdzielczości LCD
   lcd.setCursor(0, 0);
   lcd.print("Stany:");
-  
+
   pinMode(Led1, OUTPUT);
   pinMode(Led2, OUTPUT);
   pinMode(Led3, OUTPUT);
   pinMode(Led4, OUTPUT);
-  
+
   fsm_led1.add_timed_transition(&state_led1_off, &state_led1_on, 1200, NULL);
   fsm_led1.add_timed_transition(&state_led1_on, &state_led1_off, 3100, NULL);
   fsm_led2.add_timed_transition(&state_led2_off, &state_led2_on, 1700, NULL);
