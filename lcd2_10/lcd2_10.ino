@@ -59,6 +59,9 @@
 
 #include <LiquidCrystal.h>
 
+#include "Timers.h"                 // dołączona biblioteka Timers z forum android http://bit.ly/arduinotimer
+Timers <2> akcja;
+
 #define LEFT   1
 #define RIGHT  2
 #define DOWN   3

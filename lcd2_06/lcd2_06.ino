@@ -1,7 +1,5 @@
 /*
-Przykład obsługi łańcuchow tekstowych string
-Instrukcje programu powoduja wyswietlenie na wyswietlaczu
-kilku lancuchow wraz z operacja dodawania oraz zapisu wartosci zmierzonej przez A/C
+  Przykład obsługi menu
   Pinouts:
                                       +-----+
          +----[PWR]-------------------| USB |--+
@@ -32,45 +30,125 @@ kilku lancuchow wraz z operacja dodawania oraz zapisu wartosci zmierzonej przez 
 
 		  http://busyducks.com/ascii-art-arduinos
 
- */
+*/
 
+#include <LiquidCrystal.h>          //biblioteka obsługi LCD
+#include <Fsm.h>                    //obsługa przełączania stanów https://github.com/jonblack/arduino-fsm
 
-#include <LiquidCrystal.h>    //biblioteka obsługi LCD
+#include "Timers.h"                 //dołączona biblioteka Timers z forum android http://bit.ly/arduinotimer
+Timers <2> akcja;
 
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7);    //konfuguracja linii do ktorych został dołaczony LCD
+const int Led1 = 13;                //przypisanie aliasów do pinów portów
+const int Led2 = 12;
+const int Led3 = 11;
+const int Led4 = 10;
+const int SW1 = 3;
+const int SW2 = 2;
+const int SW3 = 1;
+const int SW4 = 0;
+const int Buzzer = A5;
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);//konfigurowanie linii do których został dołączony LCD
 
-void setup() {            //funkcja inicjalizacji
-  lcd.begin(16, 2);        //konfiguracja rozdzielczosci wyswietlacza LCD
+// This example shows how two finite state machines can be used to simulate
+// multitasking on an arduino. Two LED's are turned on and off at irregular
+// intervals; the finite state machines take care of the transitions.
+
+void on_led1_on_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led1_on_enter");
+  digitalWrite(Led1, LOW);
 }
 
-void loop()
-{                //petla glowna programu
-  lcd.clear();              //czyszczenie LCD
-  delay(1000);    //opoznienie 1s
-  String string1 = "String ";   //utworzenie zmiennej string String1 z zapisanym do niej przykladowym tekstem
-  lcd.print(string1);      // wyswietlenie na LCD zawartosci String1
-  delay(1000);                          //opoznienei 1s
-  string1 =  String('1');        //zapisanie do zmiennej String1 wartosci 1
-  lcd.print(string1); // wyswietlenie na LCD zawartosci String1
-  delay(1000);                          //opoznienei 1s
-  lcd.clear();  //czyszczenie LCD
-  String string2 = String("Arduino");  //utworzenie zmiennej string String2 z zapisanym do niej przykladowym tekstem
-  lcd.print(string2);   // wyswietlenie na LCD zawartosci String2
-  delay(1000);                          //opoznienei 1s
-  lcd.clear();  //czyszczenie LCD
-  string1 =  String(string2 + " w EP");     //zapisanie do zmiennej string1 tekstu zapisanego w string2 oraz dodatkowego tekstu w EP
-  lcd.print(string1);// wyswietlenie na LCD zawartosci String1
-  delay(1000);                          //opoznienei 1s
+void on_led1_off_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led1_off_enter");
+  digitalWrite(Led1, HIGH);
+}
 
-  while(1)    //poczatek nieskonczonej petli
-  {
-    string2 =  String(analogRead(A0), DEC); //odczyt wartosci z potencjometru przez A/C i zapis wyniku do string2
-    lcd.setCursor(0, 1);  //ustawienie kursora na poczatku drugiej linii LCD
-    string1 =  String("      ");   //zapisanie do string 1 kilku znakow spacjii
-    lcd.print(string1);// wyswietlenie na LCD zawartosci String1
-    lcd.setCursor(0, 1);//ustawienie kursora na poczatku drugiej linii LCD
-    lcd.print(string2);// wyswietlenie na LCD zawartosci String2
-    delay(100);   //opoznienie 100 ms
-  };
-}                                      //koniec petli glownej programu
+void on_led2_on_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led2_on_enter");
+  digitalWrite(Led2, LOW);
+}
+
+void on_led2_off_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led2_off_enter");
+  digitalWrite(Led2, HIGH);
+}
+
+void on_led3_on_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led3_on_enter");
+  digitalWrite(Led3, LOW);
+}
+
+void on_led3_off_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led3_off_enter");
+  digitalWrite(Led3, HIGH);
+}
+
+void on_led4_on_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led4_on_enter");
+  digitalWrite(Led4, LOW);
+}
+
+void on_led4_off_enter() {
+  lcd.setCursor(0, 1);
+  lcd.print("led4_off_enter");
+  digitalWrite(Led4, HIGH);
+}
+
+State state_led1_on(&on_led1_on_enter, NULL, NULL);
+State state_led1_off(&on_led1_off_enter, NULL, NULL);
+
+State state_led2_on(&on_led2_on_enter, NULL, NULL);
+State state_led2_off(&on_led2_off_enter, NULL, NULL);
+
+State state_led3_on(&on_led3_on_enter, NULL, NULL);
+State state_led3_off(&on_led3_off_enter, NULL, NULL);
+
+State state_led4_on(&on_led4_on_enter, NULL, NULL);
+State state_led4_off(&on_led4_off_enter, NULL, NULL);
+
+Fsm fsm_led1(&state_led1_off);
+Fsm fsm_led2(&state_led2_off);
+Fsm fsm_led3(&state_led3_off);
+Fsm fsm_led4(&state_led4_off);
+
+void setup() {
+  lcd.begin(16, 2);                //konfigurowanie rozdzielczości LCD
+  lcd.setCursor(0, 0);
+  lcd.print("Stany:");
+  
+  pinMode(Led1, OUTPUT);
+  pinMode(Led2, OUTPUT);
+  pinMode(Led3, OUTPUT);
+  pinMode(Led4, OUTPUT);
+  
+  fsm_led1.add_timed_transition(&state_led1_off, &state_led1_on, 1200, NULL);
+  fsm_led1.add_timed_transition(&state_led1_on, &state_led1_off, 3100, NULL);
+  fsm_led2.add_timed_transition(&state_led2_off, &state_led2_on, 1700, NULL);
+  fsm_led2.add_timed_transition(&state_led2_on, &state_led2_off, 2100, NULL);
+  fsm_led3.add_timed_transition(&state_led3_off, &state_led3_on, 1400, NULL);
+  fsm_led3.add_timed_transition(&state_led3_on, &state_led3_off, 2300, NULL);
+  fsm_led4.add_timed_transition(&state_led4_off, &state_led4_on, 4700, NULL);
+  fsm_led4.add_timed_transition(&state_led4_on, &state_led4_off, 7900, NULL);
+  akcja.attach(0, 200, stany); // Wątek 1
+
+}
+
+void stany() {
+  fsm_led1.run_machine();
+  fsm_led2.run_machine();
+  fsm_led3.run_machine();
+  fsm_led4.run_machine();
+}
+
+void loop() {                      //pętla główna programu
+  akcja.process();                 //inicjalizacja lub aktualizacja wszystkich procedur(wątków, zdarzeń itp.)
+}                                  //koniec pętli głównej
+
 
