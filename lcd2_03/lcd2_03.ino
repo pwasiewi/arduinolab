@@ -149,7 +149,7 @@ void setup() {
   digitalWrite(SW2, HIGH);
   digitalWrite(SW3, HIGH);
   digitalWrite(SW4, HIGH);
-  
+
   serial_print_help();
 
   ms.get_root_menu().add_item(&mm_mi1);
@@ -158,8 +158,8 @@ void setup() {
   mu1.add_item(&mu1_mi1);
 
   ms.display();
-  akcja.attach(0, 500, serial); // Wątek 1
-  akcja.attach(1, 100, przyciski);// Wątek 2
+  akcja.attach(0, 500, serial);    // Wątek 1
+  akcja.attach(1, 100, przyciski); // Wątek 2
 }
 
 void serial() {

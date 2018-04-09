@@ -1,10 +1,10 @@
 /*
-Przykład programu do obsługi modułu AVT1615 z:
-- wyświetlaczem LCD 2x16 znaków
-- 4 diodami LED
-- 4 przyciskami
-- brzęczykiem piezzo
-- czujnikiem temperatury LM35
+  Przykład programu do obsługi modułu AVT1615 z:
+  - wyświetlaczem LCD 2x16 znaków
+  - 4 diodami LED
+  - 4 przyciskami
+  - brzęczykiem piezzo
+  - czujnikiem temperatury LM35
   Pinouts:
                                       +-----+
          +----[PWR]-------------------| USB |--+
@@ -38,7 +38,7 @@ Przykład programu do obsługi modułu AVT1615 z:
 */
 #include <LiquidCrystal.h>          //biblioteka obsługi LCD
 
-#include "Timers.h"                 // dołączona biblioteka Timers z forum android http://bit.ly/arduinotimer
+#include "Timers.h"                 //dołączona biblioteka Timers z forum android http://bit.ly/arduinotimer
 Timers <2> akcja;
 
 const int Led1 = 13;                //przypisanie aliasów do pinów portów
@@ -82,30 +82,30 @@ void sprawdzprzycisk(int SW, int i)
 }
 
 void przyciski() {
-  sprawdzprzycisk(SW1, 1);         //sprawdzenie czy naciśnięto przycisk S1 
-  sprawdzprzycisk(SW2, 2);         //sprawdzenie czy naciśnięto przycisk S2 
-  sprawdzprzycisk(SW3, 3);         //sprawdzenie czy naciśnięto przycisk S3 
+  sprawdzprzycisk(SW1, 1);         //sprawdzenie czy naciśnięto przycisk S1
+  sprawdzprzycisk(SW2, 2);         //sprawdzenie czy naciśnięto przycisk S2
+  sprawdzprzycisk(SW3, 3);         //sprawdzenie czy naciśnięto przycisk S3
   sprawdzprzycisk(SW4, 4);         //sprawdzenie czy naciśnięto przycisk S4
 }
 
-float srednia(int PIN, int LOOP){
-  for (int i = 0; i < LOOP; i++) { //pomiar napięcia z potencjometru i dodanie wyniku do wart_pot   
+float srednia(int PIN, int LOOP) {
+  for (int i = 0; i < LOOP; i++) { //pomiar napięcia z potencjometru i dodanie wyniku do wart_pot
     wart_pot = wart_pot + analogRead(PIN);//pętla wykonywana 20 razy
   }
   wart_pot = wart_pot / LOOP;        //obliczenie średniej arytmetycznej z 20 pomiarów
 }
 
-void termometr(){
+void termometr() {
   //lcd.clear();                   //czyszczenie LCD
   lcd.setCursor(4, 0);             //ustawienie kursora w 5 kolumnie pierwszego wiersza
-  lcd.print("ArduinoL");           //wyświetlenie na LCD napisu Arduino                      
-  wart_pot = srednia(A0,20);       //obliczenie średniej arytmetycznej z 20 pomiarów
+  lcd.print("ArduinoL");           //wyświetlenie na LCD napisu Arduino
+  wart_pot = srednia(A0, 20);      //obliczenie średniej arytmetycznej z 20 pomiarów
   wart_nap = (5.0 * wart_pot) / 1024.0;//przeliczenie odczytanej wartości na napięcie
   lcd.setCursor(0, 1);             //ustawienie kursora w pierwszej pozycji drugiego wiersza LCD
   lcd.print("U=");                 //wyświetlenie napisu U=
   lcd.print(wart_nap);             //wyświetlenie napięcia
   lcd.print("V ");                 //wyświetlenie znaku V
-  wart_czuj = srednia(A1,20);      //obliczenie średniej arytmetycznej z 20 pomiarów
+  wart_czuj = srednia(A1, 20);     //obliczenie średniej arytmetycznej z 20 pomiarów
   temperatura = (5.0 * wart_czuj * 100) / 1024.0;//przeliczenie wartości na stopnie Celsjusza
   //ustawienie kursora na pozycji 9 drugiego wiersza LCD lcd.setCursor(9, 1);
   lcd.print("T=");                 //wyświetlenie napisu T=

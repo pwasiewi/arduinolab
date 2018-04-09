@@ -1,5 +1,5 @@
 /*
-Przykład obsługi menu
+  Przykład obsługi menu
   Pinouts:
                                       +-----+
          +----[PWR]-------------------| USB |--+
@@ -30,21 +30,22 @@ Przykład obsługi menu
 
 		  http://busyducks.com/ascii-art-arduinos
 
- */
+*/
 
-
-#include <Wire.h>
-#include <LiquidCrystal.h>    //biblioteka obsługi LCD
+#include <LiquidCrystal.h>              //biblioteka obsługi LCD
 
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);    //konfuguracja linii do ktorych został dołaczony LCD
 
 
 #define LCD_ADDR  0x27
-
-#define BTN_BACK  8
-#define BTN_NEXT  3
-#define BTN_PREV  7
-#define BTN_OK    5
+const int SW1 = 3;
+const int SW2 = 2;
+const int SW3 = 1;
+const int SW4 = 0;
+#define BTN_BACK  3
+#define BTN_NEXT  0
+#define BTN_PREV  1
+#define BTN_OK    2
 
 typedef struct {
   String label;
@@ -82,7 +83,7 @@ void setup() {
   menu[3] = {"Ulamki", 0, 30, 15, formatUlamki};
   menu[4] = {"Port szer.", 0, 0, 0, actionPortSzeregowy};
 
-  menuSize = sizeof(menu)/sizeof(STRUCT_MENUPOS);
+  menuSize = sizeof(menu) / sizeof(STRUCT_MENUPOS);
 }
 
 void loop() {
@@ -90,10 +91,10 @@ void loop() {
 }
 
 ENUM_BUTTON getButton() {
-  if(!digitalRead(BTN_BACK)) return BACK;
-  if(!digitalRead(BTN_NEXT)) return NEXT;
-  if(!digitalRead(BTN_PREV)) return PREV;
-  if(!digitalRead(BTN_OK)) return OK;
+  if (!digitalRead(BTN_BACK)) return BACK;
+  if (!digitalRead(BTN_NEXT)) return NEXT;
+  if (!digitalRead(BTN_PREV)) return PREV;
+  if (!digitalRead(BTN_OK)) return OK;
 
   return NONE;
 }
@@ -106,22 +107,22 @@ void drawMenu() {
 
   ENUM_BUTTON pressedButton = getButton();
 
-  if(pressedButton == NONE && lastRead != 0) {
+  if (pressedButton == NONE && lastRead != 0) {
     isPressedSince = 0;
     return;
   }
-  if(pressedButton != lastPressedButton) {
+  if (pressedButton != lastPressedButton) {
     isPressedSince = 0;
   }
 
-  if(isPressedSince > 3) autoSwitchTime = 70;
-  if(lastRead != 0 && millis() - lastRead < autoSwitchTime && pressedButton == lastPressedButton) return;
+  if (isPressedSince > 3) autoSwitchTime = 70;
+  if (lastRead != 0 && millis() - lastRead < autoSwitchTime && pressedButton == lastPressedButton) return;
 
   isPressedSince++;
   lastRead = millis();
   lastPressedButton = pressedButton;
-  
-  switch(pressedButton) {
+
+  switch (pressedButton) {
     case NEXT: handleNext(); break;
     case PREV: handlePrev(); break;
     case BACK: handleBack(); break;
@@ -130,12 +131,12 @@ void drawMenu() {
 
   lcd.home();
   lcd.clear();
-  if(isInLowerLevel) {
+  if (isInLowerLevel) {
     lcd.print(menu[currentMenuPos].label);
     lcd.setCursor(0, 1);
     lcd.print(F("> "));
 
-    if(menu[currentMenuPos].handler != NULL) {
+    if (menu[currentMenuPos].handler != NULL) {
       (*(menu[currentMenuPos].handler))();
     } else {
       lcd.print(tempVal);
@@ -150,36 +151,36 @@ void drawMenu() {
 }
 
 void handleNext() {
-  if(isInLowerLevel) {
+  if (isInLowerLevel) {
     tempVal++;
-    if(tempVal > menu[currentMenuPos].maxVal) tempVal = menu[currentMenuPos].maxVal;
+    if (tempVal > menu[currentMenuPos].maxVal) tempVal = menu[currentMenuPos].maxVal;
   } else {
     currentMenuPos = (currentMenuPos + 1) % menuSize;
   }
 }
 
 void handlePrev() {
-  if(isInLowerLevel) {
+  if (isInLowerLevel) {
     tempVal--;
-    if(tempVal < menu[currentMenuPos].minVal) tempVal = menu[currentMenuPos].minVal;
+    if (tempVal < menu[currentMenuPos].minVal) tempVal = menu[currentMenuPos].minVal;
   } else {
     currentMenuPos--;
-    if(currentMenuPos < 0) currentMenuPos = menuSize - 1;
+    if (currentMenuPos < 0) currentMenuPos = menuSize - 1;
   }
 }
 
 void handleBack() {
-  if(isInLowerLevel) {
+  if (isInLowerLevel) {
     isInLowerLevel = false;
   }
 }
 
 void handleOk() {
-  if(menu[currentMenuPos].handler != NULL && menu[currentMenuPos].maxVal <= menu[currentMenuPos].minVal) {
+  if (menu[currentMenuPos].handler != NULL && menu[currentMenuPos].maxVal <= menu[currentMenuPos].minVal) {
     (*(menu[currentMenuPos].handler))();
     return;
   }
-  if(isInLowerLevel) {
+  if (isInLowerLevel) {
     menu[currentMenuPos].currentVal = tempVal;
     isInLowerLevel = false;
   } else {
