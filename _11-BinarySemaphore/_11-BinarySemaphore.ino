@@ -27,6 +27,7 @@ and that both those copyright notices and this permission notice appear in suppo
 **************************************************************************************************/
 
 #include <Arduino_FreeRTOS.h>
+#include <semphr.h>  // add the FreeRTOS functions for Semaphores (or Flags).
 
 TaskHandle_t LPT_TaskHandle;
 TaskHandle_t MPT_TaskHandle;
@@ -34,11 +35,11 @@ TaskHandle_t HPT_TaskHandle;
 
 SemaphoreHandle_t binSemaphore_A = NULL;
 
-#define printMsg(taskhandle,str)  {\
-        Serial.print(F("Priority "));\  // Print task priority 
-        Serial.print(uxTaskPriorityGet(taskhandle));\
-        Serial.print(F(" : "));\
-        Serial.println(F(str));\        // Print user string
+void printMsg(TaskHandle_t taskhandle,char * str)  {
+        Serial.print(F("Priority "));  // Print task priority 
+        Serial.print(uxTaskPriorityGet(taskhandle));
+        Serial.print(F(" : "));
+        Serial.println(str);       // Print user string
 }
 
 void setup()

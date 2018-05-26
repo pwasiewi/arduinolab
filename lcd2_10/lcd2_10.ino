@@ -636,15 +636,15 @@ void loop()
     Serial.print(SW2value);
     Serial.print(SW3value);
     Serial.println(SW4value);
-    if (SW1value == LOW || SW2value == LOW) {         //Sprawdzenie czy nacisniety przycisk S1
+    if (SW2value == LOW) {         //Sprawdzenie czy nacisniety przycisk S1
     	mov = LEFT;
     }
-    if (SW4value == LOW || SW3value == LOW) {         //Sprawdzenie czy nacisniety przycisk S1
+    if (SW3value == LOW) {         //Sprawdzenie czy nacisniety przycisk S1
     	mov = RIGHT;
     }
 
     // Check input
-    if (key_val >= 127 && key_val <= 255) // rotate
+    if (SW1value == LOW ||  SW4value == LOW) // rotate
         mov = ROTATE;
 
     // Move/rotate the piece

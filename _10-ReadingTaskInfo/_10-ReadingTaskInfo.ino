@@ -26,6 +26,9 @@ and without fee is hereby granted, provided that this copyright notices appear i
 and that both those copyright notices and this permission notice appear in supporting documentation.
 **************************************************************************************************/
 #include <Arduino_FreeRTOS.h>
+//#include <semphr.h>  // add the FreeRTOS functions for Semaphores (or Flags).
+#include <task.h>
+//#include <mpu_wrappers.h>
 
 TaskHandle_t TaskHandle_1;
 TaskHandle_t TaskHandle_2;
