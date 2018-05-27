@@ -3,7 +3,7 @@
 Używaj polskiego timera: http://bit.ly/arduinotimer
 
 My arduino laboratory exercises. 
-Some projects are not mine:
+Some projects are not mine among them:
  - https://github.com/BLavery/virtual-GPIO
  - https://github.com/Sash0k/bluetooth-spp-terminal
  - https://github.com/maik/pragpub
