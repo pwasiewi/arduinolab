@@ -14,3 +14,4 @@ Some projects are not mine among them:
  - http://arduino.cc
  - https://github.com/zerokol
  - https://github.com/arkhipenko/TaskScheduler
+ - https://github.com/gioblu/Agenda
