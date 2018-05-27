@@ -13,3 +13,4 @@ Some projects are not mine among them:
  - https://exploreembedded.com/wiki/
  - http://arduino.cc
  - https://github.com/zerokol
+ - https://github.com/arkhipenko/TaskScheduler
