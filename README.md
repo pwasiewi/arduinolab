@@ -12,3 +12,4 @@ Some projects are not mine:
  - https://github.com/dserv01/SimpleUI16x2
  - https://exploreembedded.com/wiki/
  - http://arduino.cc
+ - https://github.com/zerokol
