@@ -1,7 +1,7 @@
 # ArduinoLab - my arduino laboratory exercises. 
 Use the smallest timer library from Polish Arduino forum: http://bit.ly/arduinotimer
 
-## Dice rolling using the Arduino device was in my dreams.
+## Dice rolling using the Arduino device was always in my dreams.
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/M5Stick-C.jpg" width="250" align="right" />
 Thus, I get the M5Stich-C that is an amazing device based on ESP32 with a small LCD display of 80 × 160 pixel, but bright and clear. 
 
@@ -32,7 +32,7 @@ Tick: Import All Images You can also output all the images with “Convert ... a
 - Save the example "Tank.c"
 
 ### Hardware components
-The [M5Stick-C]() is a device with multiple components as processor, sensors, interrupters and LED. The processor features are:
+The [M5Stick-C](https://github.com/m5stack/M5StickC) is a device with multiple components as processor, sensors, interrupters and LED. The processor features are:
 
 |   |   |
 |---|---|
