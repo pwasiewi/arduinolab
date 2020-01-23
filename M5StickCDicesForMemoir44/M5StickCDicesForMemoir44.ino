@@ -19,7 +19,7 @@ float accY = 0;
 float accZ = 0;
 int randint = 1;
 int dice_count = 1;
-int led_count = 9;
+int led_count = 8;
 int sleep_count = 0;
 
 void setup(void) {
@@ -72,7 +72,7 @@ void buttons() {
   // Serial.println("Buttons");
   if (digitalRead(M5_BUTTON_RST) == LOW) {
     led_count++;
-    if (led_count > 15)
+    if (led_count > 12)
       led_count = 7;
     while (digitalRead(M5_BUTTON_RST) == LOW);
     M5.Axp.ScreenBreath(led_count); //screen light control
