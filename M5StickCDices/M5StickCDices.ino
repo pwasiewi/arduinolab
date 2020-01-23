@@ -1,5 +1,7 @@
 /*
   Up to 8 dices on a tiny 80x160px TFT display
+  Author: Piotr Wasiewicz <pwasiewi(at)gmail.com>
+  based on two dices Alfonso de Cala demo version
 */
 
 #include "Timers.h"                 // Timers from Polish forum arduino http://bit.ly/arduinotimer
