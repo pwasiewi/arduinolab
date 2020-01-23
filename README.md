@@ -33,7 +33,6 @@ Tick: Import All Images You can also output all the images with “Convert ... a
 
 ### Hardware components
 The [M5Stick-C](https://github.com/m5stack/M5StickC) is a device with multiple components as processor, sensors, interrupters and LED. The processor features are:
-## PinMap
 
 **Red LED & IR transmitter & BUTTON A & BUTTON B**
 
