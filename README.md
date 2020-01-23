@@ -33,20 +33,54 @@ Tick: Import All Images You can also output all the images with “Convert ... a
 
 ### Hardware components
 The [M5Stick-C](https://github.com/m5stack/M5StickC) is a device with multiple components as processor, sensors, interrupters and LED. The processor features are:
+## PinMap
 
-|   |   |
-|---|---|
-|Microcontroler|ESP32 Pico|
-|Frequency|240MHz|
-|Flash|4MB|
-|RAM|320KB|
+**Red LED & IR transmitter & BUTTON A & BUTTON B**
 
-- **I2C BM8563** : Realizes the RTC function. Address: 0x15. 
-- **AXP192** :  power management IC. 
-- **ST7735S** : LCD IPS Display 80 × 160 pixel, 0,96"
-- **SH200Q** : IMU Movement and positioning 6 axis inertial sensor.
-- **SPM1423** : PDM Micropohne
-- **IR** : IR Transmitter
+<table>
+ <tr><td>ESP32 chip</td><td>GPIO10</td><td>GPIO9</td><td>GPIO37</td><td>GPIO39</td></tr>
+ <tr><td>Red LED</td><td>LED pin</td><td> </td><td> </td><td> </td></tr>
+ <tr><td>IR transmitter</td><td> </td><td>transmitter pin</td><td> </td><td> </td></tr>
+<tr><td>BUTTON A</td><td> </td><td> </td><td>button pin</td><td> </td></tr>
+<tr><td>BUTTON B</td><td> </td><td> </td><td> </td><td>button pin</td></tr>
+</table>
+
+**TFT Screen**
+
+*Driver IC: [ST7735S](https://github.com/m5stack/M5-Schematic/blob/master/Core/ST7735S_v1.1.pdf)*
+
+*Resolution: 80 * 160*
+
+<table>
+ <tr><td>ESP32 chip</td><td>GPIO15</td><td>GPIO13</td><td>GPIO23</td><td>GPIO18</td><td>GPIO5</td></tr>
+ <tr><td>TFT Screen</td><td>TFT_MOSI</td><td>TFT_CLK</td><td>TFT_DC</td><td>TFT_RST</td><td>TFT_CS</td></tr>
+</table>
+
+**GROVE interface**
+
+<table>
+ <tr><td>ESP32 chip</td><td>GPIO33</td><td>GPIO32</td><td>5V</td><td>GND</td></tr>
+ <tr><td>GROVE interface</td><td>SCL</td><td>SDA</td><td>5V</td><td>GND</td></tr>
+</table>
+
+**Microphone ([SPM1423](https://github.com/m5stack/M5-Schematic/blob/master/Core/SPM1423HM4H-B.pdf))**
+
+<table>
+ <tr><td>ESP32 chip</td><td>GPIO0</td><td>GPIO34</td></tr>
+ <tr><td>Microphone</td><td>SCL</td><td>SDA</td></tr>
+</table>
+
+**6-axis IMU ([SH200Q](https://github.com/m5stack/M5-Schematic/blob/master/Core/SH200Q.pdf)) & Power Mangement IC ([AXP192](https://github.com/m5stack/M5-Schematic/blob/master/Core/AXP192%20Datasheet%20v1.13_cn.pdf))**
+
+<table>
+ <tr><td>ESP32 chip</td><td>GPIO22</td><td>GPIO21</td>
+ <tr><td>6-axis IMU (SH200Q)</td><td>SCL</td><td>SDA</td>
+ <tr><td>Power Mangement IC (AXP192)</td><td>SCL</td><td>SDA</td>
+</table>
+
+**M5StickC top extended IO port**
+
+<img src="https://github.com/pwasiewi/arduinolab/blob/master/images/m5stickc_04.png" alt="M5StickC_04">
 
 ### Software components
 - [Arduino IDE](https://www.hackster.io/arduino/products/arduino-ide?ref=project-8e87cc)
