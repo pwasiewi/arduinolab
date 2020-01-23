@@ -11,7 +11,7 @@ Thus, I get the M5Stich-C that is an amazing device based on ESP32 with a small 
 
 Previously, it is mandatory install the development environment. If you use the Arduino IDE, exists a perfect guide to start up the device : [M5StickC Quick Start - Arduino Win](https://docs.m5stack.com/#/en/quick_start/m5stickc/m5stickc_quick_start_with_arduino_Windows?id=_2-copy-the-following-esp32-boards-manager-url-to-additional-boards-manager-urls-hit-ok) 
 
-finally this is the configuration that you need to compile the Arduino sketch of M5StickCDicesForMemoir44 for 1-8 Memoir'44 dices or M5StickCDices for usual 1-8 dices.
+Finally, this is the configuration that you need to compile the Arduino sketch of M5StickCDicesForMemoir44 for 1-8 Memoir'44 dices or M5StickCDices for usual 1-8 dices.
 
 Now only that you need is plug in the M5Stick whith the USB-C adaptor and load the program. 
 
@@ -19,7 +19,7 @@ Now only that you need is plug in the M5Stick whith the USB-C adaptor and load t
 
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/lcd_convert_s.jpg" align="right" />
 
-Execute the lcd-image-converter [included in this repository](https://github.com/riuson/lcd-image-converter).
+Execute [the lcd-image-converter from this repository](https://github.com/riuson/lcd-image-converter).
 1. Png or Jpg is read from File->Open Menu. The image will be displayed when loaded. 
 2. Select: Option->Conversions Menu. The top Preset: selects "Color R5G6B5". 
 3. Select: Image tap and select “8 bit” for Block size :. Press "OK". 
