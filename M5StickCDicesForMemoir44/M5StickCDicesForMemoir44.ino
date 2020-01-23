@@ -65,10 +65,10 @@ void sensors() {
     }
   } else {
     M5.IMU.getAccelData(&accX, &accY, &accZ);
-    randint = (int)1000 * (accX + accY + accZ);
+    //randint = (int)1000 * (accX + accY + accZ);
     // Serial.println("Seed=");
     // Serial.println(micros()+randint%100);
-    randomSeed(micros() + randint % 100);
+    //randomSeed(micros() + randint % 100);
     if (accX > 1.5 ||  accY > 1.5 ) {
       depict();
     }
@@ -85,6 +85,9 @@ void buttons() {
     M5.Axp.ScreenBreath(led_count); //screen light control
   }
   if (digitalRead(M5_BUTTON_HOME) == LOW) {
+    //M5.IMU.getAccelData(&accX, &accY, &accZ);
+    randint = (int) 1000 * (accX + accY + accZ);
+    randomSeed(micros() + randint % 100);
     dice_count++;
     if (dice_count > 8)
       dice_count = 1;
