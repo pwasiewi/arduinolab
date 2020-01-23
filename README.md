@@ -1,5 +1,5 @@
 # ArduinoLab - my arduino laboratory exercises. 
-Use the smallest timer library from Polish Arduino forum: http://bit.ly/arduinotimer
+Use the smallest timer library from Polish Arduino forum: http://bit.ly/arduinotimer - in file [TimersForumArduino.zip](https://github.com/pwasiewi/arduinolab/blob/master/TimersForumArduino.zip) 
 
 ## Dice rolling using the Arduino device was always in my dreams.
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/M5Stick-C.jpg" width="250" align="right" />
