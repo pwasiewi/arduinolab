@@ -3,7 +3,7 @@ Use the smallest timer library from Polish Arduino forum: http://bit.ly/arduinot
 
 ## Dice rolling using the Arduino device was always in my dreams.
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/M5Stick-C.jpg" width="250" align="right" />
-Thus, I get the M5StickC (https://www.hackster.io/m5stack) that is an amazing device based on ESP32 with a small LCD display of 80 × 160 pixel, but bright and clear. 
+Thus, I get the [M5StickC](https://www.hackster.io/m5stack/) that is an amazing device based on ESP32 with a small LCD display of 80 × 160 pixel, but bright and clear. 
 
 ### How to load the sketch
 
