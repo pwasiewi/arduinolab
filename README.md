@@ -3,7 +3,7 @@ Use the smallest timer library from Polish Arduino forum: http://bit.ly/arduinot
 
 ## Dice rolling using the Arduino device was always in my dreams
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/M5Stick-C.jpg" width="250" align="right" />
-Thus, I get the M5StickC that is an amazing device (as you can see in exemplary projects from https://www.hackster.io/m5stack) based on a ESP32 development board with 0.96 inch TFT color screen (80 * 160 resolution - very bright and clear), Red LED, two user buttons and a power switch, Microphone, IR transmitter, 6-axis IMU (SH200Q) and 80 mAH battery. The ESP32 module ESP32-Pico in M5StickC also has a built-in 4MB flash. I with my son made not only usual dices (from 1 to 8 ones), but also a special version for boardgame Memoir'44(https://boardgamegeek.com/boardgame/10630/memoir-44).
+Thus, I get the M5StickC that is an amazing device (as you can see in exemplary projects from https://www.hackster.io/m5stack) based on a ESP32 development board with 0.96 inch TFT color screen (80 * 160 resolution - very bright and clear), Red LED, two user buttons and a power switch, Microphone, IR transmitter, 6-axis IMU (SH200Q) and 80 mAH battery. The ESP32 module ESP32-Pico in M5StickC also has a built-in 4MB flash. I with my son made not only usual dices (from 1 to 8 ones), but also a special version for boardgame Memoir'44 - https://boardgamegeek.com/boardgame/10630/memoir-44.
 
 ### How to load the sketch
 
