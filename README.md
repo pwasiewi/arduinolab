@@ -1,12 +1,11 @@
-# ArduinoLab
-## My arduino laboratory exercises. 
+# ArduinoLab - my arduino laboratory exercises. 
 Use the smallest timer library from Polish Arduino forum: http://bit.ly/arduinotimer
 
 ## Dice rolling using the Arduino device was in my dreams.
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/M5Stick-C.jpg" width="250" align="right" />
 Thus, I get the M5Stich-C that is an amazing device based on ESP32 with a small LCD display of 80 × 160 pixel, but bright and clear. 
 
-## How to load the sketch
+### How to load the sketch
 
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/M5Stick_Arduino_IDE.PNG" width="300" align="right" />
 
@@ -20,7 +19,7 @@ Now only that you need is plug in the M5Stick whith the USB-C adaptor and load t
 
 <img src="https://github.com/pwasiewi/arduinolab/blob/master/images/lcd_convert_s.jpg" align="right" />
 
-Execute the lcd-image-converter.exe include in this repository.
+Execute the lcd-image-converter [included in this repository](https://github.com/riuson/lcd-image-converter).
 1. Png or Jpg is read from File->Open Menu. The image will be displayed when loaded. 
 2. Select: Option->Conversions Menu. The top Preset: selects "Color R5G6B5". 
 3. Select: Image tap and select “8 bit” for Block size :. Press "OK". 
@@ -53,6 +52,7 @@ The [M5Stick-C]() is a device with multiple components as processor, sensors, in
 - [Arduino IDE](https://www.hackster.io/arduino/products/arduino-ide?ref=project-8e87cc)
 
 Some projects are not mine among them:
+ - https://github.com/McOrts/M5StickC_Nixie_tube_Clock
  - https://github.com/BLavery/virtual-GPIO
  - https://github.com/Sash0k/bluetooth-spp-terminal
  - https://github.com/maik/pragpub
@@ -66,4 +66,4 @@ Some projects are not mine among them:
  - https://github.com/gioblu/Agenda
  - https://github.com/jonblack/arduino-menusystem
  - https://github.com/Sash0k/bluetooth-spp-terminal
- - https://github.com/McOrts/M5StickC_Nixie_tube_Clock
+
