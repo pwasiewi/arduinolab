@@ -77,9 +77,9 @@ The [M5Stick-C](https://github.com/m5stack/M5StickC) is a device with multiple c
  <tr><td>Power Mangement IC (AXP192)</td><td>SCL</td><td>SDA</td>
 </table>
 
-**M5StickC top extended IO port**
+**M5StickC Memoir'44 Dices
 
-<img src="https://github.com/pwasiewi/arduinolab/blob/master/images/m5stickc_04.png" alt="M5StickC_04">
+<img src="https://github.com/pwasiewi/arduinolab/blob/master/images/dicememoir44.jpg" alt="M5StickCMemoir44">
 
 ### Software components
 - [Arduino IDE](https://www.hackster.io/arduino/products/arduino-ide?ref=project-8e87cc)
